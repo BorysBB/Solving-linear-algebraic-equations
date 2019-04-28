@@ -1,0 +1,193 @@
+clear
+close
+
+N1=3;
+N2=10;
+N3=20;
+
+k=0:21;
+x=(2.^k)/300;
+
+RMS3=zeros(2,length(k));
+RMS10=zeros(2,length(k));
+RMS20=zeros(2,length(k));
+
+ME3=zeros(2,length(k));
+ME10=zeros(2,length(k));
+ME20=zeros(2,length(k));
+
+Mat_RMS3=zeros(2,length(k));
+Mat_RMS10=zeros(2,length(k));
+Mat_RMS20=zeros(2,length(k));
+
+Mat_ME3=zeros(2,length(x));
+Mat_ME10=zeros(2,length(x));
+Mat_ME20=zeros(2,length(x));
+
+
+for i=k+1
+    
+    
+    A3=make_a_matrix(x(i), N1);
+    A10=make_a_matrix(x(i), N2);
+    A20=make_a_matrix(x(i), N3);
+    
+    
+    RMS3(1,i)=delta_2(A3,invertedLU(A3));
+    RMS3(2,i)=delta_2(A3,invertedLLT(A3));
+    
+    RMS10(1,i)=delta_2(A10,invertedLU(A10));
+    RMS10(2,i)=delta_2(A10,invertedLLT(A10));
+    
+    RMS20(1,i)=delta_2(A20,invertedLU(A20));
+    RMS20(2,i)=delta_2(A20,invertedLLT(A20));
+    
+   
+    
+    ME3(1,i)=delta_Infinity(A3, invertedLU(A3));
+    ME3(2,i)=delta_Infinity(A3, invertedLLT(A3));
+    
+    ME10(1,i)=delta_Infinity(A10, invertedLU(A10));
+    ME10(2,i)=delta_Infinity(A10, invertedLLT(A10));  
+
+    ME20(1,i)=delta_Infinity(A20, invertedLU(A20));
+    ME20(2,i)=delta_Infinity(A20, invertedLLT(A20));
+    
+    
+    
+    mat_RMS3(1,i)=mat_delta_2(A3,invertedLU(A3));
+    mat_RMS3(2,i)=mat_delta_2(A3,invertedLLT(A3));
+    
+    mat_RMS10(1,i)=mat_delta_2(A10,invertedLU(A10));
+    mat_RMS10(2,i)=mat_delta_2(A10,invertedLLT(A10));
+    
+    mat_RMS20(1,i)=mat_delta_2(A20,invertedLU(A20));
+    mat_RMS20(2,i)=mat_delta_2(A20,invertedLLT(A20));
+    
+    
+    
+    mat_ME3(1,i)=mat_delta_Infinity(A3,invertedLU(A3));
+    mat_ME3(2,i)=mat_delta_Infinity(A3,invertedLLT(A3));
+ 
+    mat_ME10(1,i)=mat_delta_Infinity(A10,invertedLU(A10));
+    mat_ME10(2,i)=mat_delta_Infinity(A10,invertedLLT(A10));
+   
+    mat_ME20(1,i)=mat_delta_Infinity(A20,invertedLU(A20));
+    mat_ME20(2,i)=mat_delta_Infinity(A20,invertedLLT(A20));
+    
+    
+end
+
+%the root mean-square error on x
+figure(1)
+loglog(x, RMS3(1, :), x, RMS3(2, :))
+title("RMS dependence on x")
+xlabel("x")
+ylabel("RMS")
+legend("LU transformation N=3", "LLT transformation N=3")
+
+figure(7)
+loglog(x, mat_RMS3(1,:),x, mat_RMS3(2,:) )
+title("mat_RMS dependence on x")
+xlabel("x")
+ylabel("mat_RMS")
+legend("matlab,LU transformation N=3", "matlab, LLT transformation N=3")
+
+figure(8)
+loglog(x, mat_RMS10(1,:),x, mat_RMS10(2,:) )
+title("mat_RMS dependence on x")
+xlabel("x")
+ylabel("mat_RMS")
+legend("matlab,LU transformation N=10", "matlab, LLT transformation N=10")
+
+figure(9)
+loglog(x, mat_RMS20(1,:),x, mat_RMS20(2,:) )
+title("mat_RMS dependence on x")
+xlabel("x")
+ylabel("mat_RMS")
+legend("matlab,LU transformation N=20", "matlab, LLT transformation N=20")
+
+
+
+figure(2)
+loglog(x, RMS10(1, :), x, RMS10(2, :) )
+title("RMS dependence on x")
+xlabel("x")
+ylabel("RMS")
+legend("LU transformation N=10", "LLT transformation N=10")
+
+figure(3)
+loglog(x, RMS20(1, :), x, RMS20(2, :))
+title("RMS dependence on x")
+xlabel("x")
+ylabel("RMS")
+legend("LU transformation N=20", "LLT transformation N=20")
+
+
+
+%the maximum error on x
+
+figure(4)
+loglog(x, ME3(1,:),x ,ME3(2,:))
+title("Maximum error dependance")
+xlabel("x")
+ylabel("Max error")
+legend("LU transformation N=3", "LLT transformation N=3")
+
+figure(10)
+loglog(x, mat_ME3(1,:),x ,mat_ME3(2,:))
+title("Maximum error dependance")
+xlabel("x")
+ylabel("Max error")
+legend("matlab LU transformation N=3", "matlab LLT transformation N=3")
+
+figure(11)
+loglog(x, mat_ME10(1,:),x ,mat_ME10(2,:))
+title("Maximum error dependance")
+xlabel("x")
+ylabel("Max error")
+legend("matlab LU transformation N=10", "matlab LLT transformation N=10")
+
+figure(12)
+loglog(x, mat_ME20(1,:),x ,mat_ME20(2,:))
+title("Maximum error dependance")
+xlabel("x")
+ylabel("Max error")
+legend("matlab LU transformation N=20", "matlab LLT transformation N=20")
+
+figure(5)
+loglog(x, ME10(1,:),x ,ME10(2,:))
+title("Maximum error dependance")
+xlabel("x")
+ylabel("Max error")
+legend("LU transformation N=10", "LLT transformation N=10")
+
+figure(6)
+loglog(x, ME20(1,:),x ,ME20(2,:))
+title("Maximum error dependance")
+xlabel("x")
+ylabel("Max error")
+legend("LU transformation N=20", "LLT transformation N=20")
+
+
+
+
+
+function RMS = delta_2(A, inverseA)
+    d = A*inverseA - eye(size(A));
+    RMS = max(sqrt(max(abs(eig(d * d.')))));
+end
+
+function ME = delta_Infinity(A, inverseA)
+    d=A*inverseA-eye(size(A));
+    d=abs(d);
+    ME=max(sum(d,2));
+end
+
+function Mat = mat_delta_2(A, inverseA)
+    d=A*inverseA - eye(size(A));
+    Mat = norm(d);
+end
+
+function Matl = mat_delta_Infinity(A, inverseA)
+    d=A*inverseA - eye(size(A));
