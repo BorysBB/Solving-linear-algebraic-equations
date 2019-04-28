@@ -1,0 +1,72 @@
+clear 
+close
+
+N1=3;
+N2=10;
+N3=20;
+steps=1000;
+
+
+alphas=linspace(0.99,1.01,steps);
+
+det3=zeros(1,steps);
+cond3=zeros(1,steps);
+
+det10=zeros(1,steps);
+cond10=zeros(steps,1);
+
+det20=zeros(1,steps);
+cond20=zeros(1,steps);
+
+
+
+
+for i= 1:steps
+    
+    x=log(alphas(i));
+    
+A3 = make_a_matrix(x,N1);
+det3(i)=det(A3);
+cond3(i)=cond(A3);
+
+B10 = make_a_matrix(x,N2);
+det10(i)=det(B10);
+cond10(i)=cond(B10);
+
+C20 = make_a_matrix(x,N3);
+det20(i)=det(C20);
+cond20(i)=cond(C20);
+    
+    
+end
+
+
+figure(1)
+semilogy(alphas, det3)
+legend("N=3")
+title("det(A)")
+xlabel("alpha")
+ylabel("det(A)")
+hold on
+
+semilogy(alphas, det10)
+legend("N=10")
+title("det(A)")
+xlabel("alpha")
+ylabel("det(A)")
+hold on
+
+semilogy(alphas, det20)
+legend("N=20")
+title("det(A)")
+xlabel("alpha")
+ylabel("det(A)")
+
+
+
+figure(4)
+semilogy(alphas, cond3, alphas, cond10, alphas, cond20)
+legend("N = 3", "N = 10", "N = 20")
+title("cond(A)")
+xlabel("alpha")
+ylabel("cond(A)")
